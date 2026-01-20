@@ -98,3 +98,21 @@ header {
 }
 .login-box button { padding: 8px 12px; margin-top: 8px; }
 .login-box .note { font-size: 12px; opacity: 0.8; margin-top: 8px; }
+
+/* Video thumbnail styles */
+.thumb-video {
+  width: 100%;
+  height: auto;
+  display: block;
+  background: #000;
+}
+.thumb video, .thumb img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+.thumb figcaption {
+  word-break: break-all; /* permet d'afficher le nom fichier long */
+  font-size: 13px;
+  padding: 6px;
+}
