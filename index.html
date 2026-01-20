@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Galerie simple (iOS9)</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="login-overlay" class="overlay hidden">
+  <div class="login-box">
+    <h2>Entrer le mot de passe</h2>
+    <input id="password-input" type="password" placeholder="Mot de passe">
+    <div class="login-actions">
+      <button id="login-btn">Entrer</button>
+    </div>
+    <p class="note">Protection simple côté client — mot de passe visible dans le code.</p>
+  </div>
+</div>
+
+<header>
+  <h1>Ma galerie</h1>
+  <p>Clique sur une miniature pour agrandir ou lancer une vidéo.</p>
+</header>
+
+<main id="gallery">
+  <section class="grid">
+    <!-- Exemple : adapte les noms dans assets/ -->
+    <figure class="thumb" data-type="image" data-src="assets/photo1-large.jpg">
+      <img src="assets/photo1-thumb.jpg" alt="Photo 1">
+      <figcaption>Photo 1</figcaption>
+    </figure>
+
+    <figure class="thumb" data-type="video" data-video="assets/video1.mp4" data-poster="assets/video1-poster.jpg">
+      <img src="assets/video1-poster-thumb.jpg" alt="Vidéo 1">
+      <figcaption>Vidéo 1</figcaption>
+    </figure>
+  </section>
+</main>
+
+<div id="modal" class="modal hidden" role="dialog" aria-hidden="true">
+  <div class="modal-content">
+    <button id="modal-close" class="modal-close" aria-label="Fermer">&times;</button>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
