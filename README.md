@@ -1,102 +1,24 @@
-// JS simple compatible iOS9
-(function () {
-  // ---------- CONFIG ----------
-  // Met le mot de passe ici pour activer la protection côté client
-  // ATTENTION : le mot de passe est visible dans le code (pas sécurisé)
-  var SITE_PASSWORD = ""; // ex: "monmotdepass"
-  // ----------------------------
+# Galerie simple (iOS9 compatible)
 
-  function $(sel, root) { return (root || document).querySelector(sel); }
-  function $all(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
+1) Placer les fichiers : index.html, styles.css, script.js à la racine du dépôt.
+2) Créer un dossier `assets/` et y téléverser :
+   - miniatures (ex: photo1-thumb.jpg)
+   - images grandes (ex: photo1-large.jpg)
+   - vidéos encodées en mp4 (ex: video1.mp4) et miniatures/pôsters pour les vidéos.
 
-  var modal = $("#modal");
-  var modalBody = $("#modal-body");
-  var modalClose = $("#modal-close");
+Encodage recommandé (ffmpeg) pour iOS9 :
+```
+ffmpeg -i input.mov -c:v libx264 -profile:v baseline -level 3.0 -pix_fmt yuv420p -crf 23 -c:a aac -b:a 128k -movflags +faststart output.mp4
+```
 
-  function openModalWithImage(src) {
-    modalBody.innerHTML = "";
-    var img = document.createElement("img");
-    img.src = src;
-    modalBody.appendChild(img);
-    showModal();
-  }
+Activation du mot de passe (simple / côté client) :
+- Ouvre `script.js` et mets `var SITE_PASSWORD = "tonMotDePasse";` puis enregistre.
 
-  function openModalWithVideo(src, poster) {
-    modalBody.innerHTML = "";
-    var video = document.createElement("video");
-    video.setAttribute("controls", "controls");
-    video.setAttribute("preload", "metadata");
-    video.setAttribute("webkit-playsinline", "webkit-playsinline");
-    video.setAttribute("playsinline", "playsinline");
-    video.src = src;
-    if (poster) video.poster = poster;
-    modalBody.appendChild(video);
-    showModal();
-  }
+Limiter l'accès correctement (option sûre) :
+- GitHub Pages ne propose pas d'authentification HTTP Basic.
+- Pour une protection réelle, il faut un serveur ou un service qui gère l'authentification (ex : hébergement personnel, Netlify + functions, Cloudflare Access, ou config Apache/Nginx). Dis‑moi ton environnement si tu veux que je te guide là-dessus.
 
-  function showModal() {
-    modal.className = modal.className.replace("hidden", "").trim();
-    modal.setAttribute("aria-hidden", "false");
-  }
-
-  function closeModal() {
-    modal.className = "modal hidden";
-    modal.setAttribute("aria-hidden", "true");
-    modalBody.innerHTML = "";
-  }
-
-  modalClose.addEventListener("click", function (e) {
-    e.preventDefault();
-    closeModal();
-  }, false);
-
-  modal.addEventListener("click", function (e) {
-    if (e.target === modal) closeModal();
-  }, false);
-
-  function initGallery() {
-    var thumbs = $all(".thumb");
-    for (var i = 0; i < thumbs.length; i++) {
-      (function (fig) {
-        fig.addEventListener("click", function () {
-          var type = fig.getAttribute("data-type");
-          if (type === "image") {
-            openModalWithImage(fig.getAttribute("data-src"));
-          } else if (type === "video") {
-            openModalWithVideo(fig.getAttribute("data-video"), fig.getAttribute("data-poster"));
-          }
-        }, false);
-      }(thumbs[i]));
-    }
-  }
-
-  var loginOverlay = $("#login-overlay");
-  var pwInput = $("#password-input");
-  var loginBtn = $("#login-btn");
-  function showLogin() { loginOverlay.className = loginOverlay.className.replace("hidden", "").trim(); }
-  function hideLogin() { loginOverlay.className = "overlay hidden"; }
-  function checkPasswordAttempt() {
-    var attempt = pwInput.value || "";
-    if (attempt === SITE_PASSWORD) {
-      hideLogin();
-      initGallery();
-    } else {
-      alert("Mot de passe incorrect.");
-    }
-  }
-
-  (function ready(fn) {
-    if (document.readyState !== "loading") fn();
-    else document.addEventListener("DOMContentLoaded", fn);
-  }(function () {
-    if (SITE_PASSWORD && SITE_PASSWORD.length > 0) {
-      showLogin();
-      loginBtn.addEventListener("click", checkPasswordAttempt, false);
-      pwInput.addEventListener("keyup", function (e) {
-        if (e.keyCode === 13) checkPasswordAttempt();
-      }, false);
-    } else {
-      initGallery();
-    }
-  }));
-}());
+Tester sur l'iPad :
+- Si tu utilises GitHub Pages (hébergé par GitHub), après activation (voir étapes ci‑dessous), ouvre l'URL:
+  https://<ton-nom-utilisateur>.github.io/<nom-du-repo>/
+- iOS9 n'autorise généralement pas l'autoplay : il faudra cliquer pour lancer les vidéos.
